@@ -1,18 +1,45 @@
 <html>
-	<head>
-		<script src="js/mail-generator.js"></script>
-		<link href="css/style.css" rel="stylesheet" media="screen">
-    <script>
-      window.onload = function(){
-        // ALL OF YOUR JAVASCRIPT CODE SHOULD GO HERE. 
-        // We have to use window.onload so your JavaScript doesn't execute until the page has loaded and all HTML has been downloaded to your browser
-        
-      };
-    </script>
-	</head>
-	<body>
-		<div class="container" id="main">
-			Build Me!
-		</div>
-	</body>
+
+<head>
+	<script src="js/mail-generator.js"></script>
+	<link href="css/style.css" rel="stylesheet" media="screen">
+	<script>
+		window.onload = function () {
+			// ALL OF YOUR JAVASCRIPT CODE SHOULD GO HERE. 
+			// We have to use window.onload so your JavaScript doesn't execute until the page has loaded and all HTML has been downloaded to your browser
+			// var arrMessages = [];
+			var arrTitles = ["Date", "Subject", "Sender"];
+			var main = document.getElementById('main');
+			var table = document.createElement('table');
+			table.id = 'mailbox';
+			main.appendChild(table);
+			var thead = document.createElement('thead');
+			var headerRow = document.createElement('tr');
+			for (var i = 0; i < arrTitles.length; i += 1) {
+				var th = document.createElement('th');
+				th.innerHTML = arrTitles[i];
+				// th.style = "color: blue; ";
+				headerRow.appendChild(th);
+			}
+			thead.appendChild(headerRow);
+			table.appendChild(thead);
+			setInterval(
+				function () {
+					var msg = getNewMessage();
+					var row = document.createElement('tr');
+
+				}, 3000
+			);
+
+
+		};
+	</script>
+</head>
+
+<body>
+	<div class="container" id="main">
+		Build Me!
+	</div>
+</body>
+
 </html>

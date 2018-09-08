@@ -1,0 +1,14 @@
+#mailbox {
+  margin: auto auto;
+  border: 1px solid blue;
+}
+
+#mailbox th {
+  background-color: white;
+  color: blue;
+  text-align: center;
+}
+
+#mailbox td {
+  background-color: gray;
+}

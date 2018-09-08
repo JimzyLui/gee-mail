@@ -7,8 +7,25 @@
   background-color: white;
   color: blue;
   text-align: center;
+  font-style: bold;
+  border-bottom: 2px solid blue;
 }
 
 #mailbox td {
-  background-color: gray;
+  margin: 0 auto;
+  padding: 5px 5px;
+}
+#main {
+  text-align: center;
+}
+.msgHeader {
+  background-color: lightgray;
+}
+.msgBody {
+  background-color: white;
+  font-style: italic;
+}
+#ctr {
+  font-style: italic;
+  color: blue;
 }

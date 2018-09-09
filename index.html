@@ -4,81 +4,115 @@
 	<script src="js/mail-generator.js"></script>
 	<link href="css/style.css" rel="stylesheet" media="screen">
 	<script>
-		function formatDate(dte) {
-			return dte.getMonth() + 1 + '/' + dte.getDate() + '/' + dte.getFullYear() + '  ' +
-				dte.getHours() + ':' + dte.getMinutes();
-			// return dte.getFullYear();
-		}
-		function toggleVisibility() {
-			if (this.style.visibility = "hidden") {
-				this.style.visibility = 'visible';
-			} else {
-				this.style.display = 'none';
-			}
-		}
+
 		window.onload = function () {
 			// ALL OF YOUR JAVASCRIPT CODE SHOULD GO HERE. 
 			// We have to use window.onload so your JavaScript doesn't execute until the page has loaded and all HTML has been downloaded to your browser
-			// var arrMessages = [];
 			var iMsgCounter = 0;
-			var arrTitles = ["Date", "Subject", "Sender"];
+			var ctrMsgTop = document.createElement('p');
+			var ctrMsgBottom = document.createElement('p');
+			ctrMsgTop.className = 'counter';
+			ctrMsgBottom.className = 'counter';
+			function formatDate(dte) {
+				return dte.getMonth() + 1 + '/' + dte.getDate() + '/' + dte.getFullYear() + '  ' +
+					dte.getHours() + ':' + dte.getMinutes();
+				// return dte.getFullYear();
+			}
+			function toggleVisibility() {
+				var iRow = this.rowIndex;
+				var iRowHead = 0;
+				var iRowBody = 0;
+				// check if odd/even row
+				if (iRow % 2 === 0) {
+					//even, msg row
+					iRowBody = iRow;
+					iRowHead = iRow - 1;
+				} else {
+					iRowHead = iRow;
+					iRowBody = iRow + 1;
+				}
+				var rowMsgH = document.getElementById('mailbox').rows[iRowHead];
+				var rowMsgB = document.getElementById('mailbox').rows[iRowBody];
+				if (rowMsgB.style.display == "none") {
+					// rowMsgB.style.visibility = 'visible';
+					rowMsgB.style.display = '';
+					// alert(iRowBody);
+				} else {
+					rowMsgB.style.display = 'none';
+					// alert('none');
+				}
+			}
+			function sortByKey(array, key) {
+				return array.sort(function (a, b) {
+					var x = a[key]; var y = b[key];
+					return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+				});
+			}
+			function loadMessage(msg) {
+				iMsgCounter++;
+				ctrMsgTop.innerHTML = iMsgCounter + ' messages';
+				ctrMsgBottom.innerHTML = iMsgCounter + ' messages';
+				var rowMsgHeader = document.createElement('tr');
+				var rowMsgBody = document.createElement('tr');
+				var tdDate = document.createElement('td');
+				var tdSender = document.createElement('td');
+				var tdSubject = document.createElement('td');
+				var tdBody = document.createElement('td');
+				tdDate.innerHTML = formatDate(msg.date);
+				tdSender.innerHTML = msg.sender;
+				tdSubject.innerHTML = msg.subject;
+				tdBody.innerHTML = msg.body;
+				rowMsgHeader.appendChild(tdDate);
+				rowMsgHeader.appendChild(tdSender);
+				rowMsgHeader.appendChild(tdSubject);
+				rowMsgHeader.className = 'msgHeader message';
+				rowMsgHeader.onclick = toggleVisibility;
+				tdBody.colSpan = "3";
+				rowMsgBody.appendChild(tdBody);
+				rowMsgBody.className = 'msgBody';
+				rowMsgBody.onclick = toggleVisibility;
+				rowMsgBody.style.display = 'none';
+				tbody.appendChild(rowMsgHeader);
+				tbody.appendChild(rowMsgBody);
+			}
+			const arrTitles = ["Date", "Subject", "Sender"];
 			var main = document.getElementById('main');
 			var table = document.createElement('table');
 			table.id = 'mailbox';
-			var ctr = document.createElement('p');
-			ctr.id = 'ctr';
-			main.appendChild(table);
-			main.appendChild(ctr);
+
 			var thead = document.createElement('thead');
-			var headerRow = document.createElement('tr');
+			var rowTableHead = document.createElement('tr');
 			for (var i = 0; i < arrTitles.length; i += 1) {
 				var th = document.createElement('th');
 				th.innerHTML = arrTitles[i];
-				headerRow.appendChild(th);
+				rowTableHead.appendChild(th);
 			}
-			thead.appendChild(headerRow);
+			thead.appendChild(rowTableHead);
 			table.appendChild(thead);
-			var tbody = document.createElement('tbody');
+			var tbody = document.createElement('tbody'); table.appendChild(tbody);
+
+			// need to sort the array first
+			window.geemails = sortByKey(window.geemails, 'date');
+			main.appendChild(ctrMsgTop);
+			main.appendChild(table);
+			main.appendChild(ctrMsgBottom);
+			// load the email that's already here
+			for (x = 0; x < window.geemails.length; x++) {
+				loadMessage(window.geemails[x]);
+			}
+			// add new incoming email
 			setInterval(
 				function () {
-					var msg = getNewMessage();
-					iMsgCounter++;
-					ctr.innerHTML = iMsgCounter + ' messages';
-					var row1 = document.createElement('tr');
-					var row2 = document.createElement('tr');
-					var tdDate = document.createElement('td');
-					var tdSender = document.createElement('td');
-					var tdSubject = document.createElement('td');
-					var tdBody = document.createElement('td');
-					// tdDate.innerHTML = msg.date;
-					tdDate.innerHTML = formatDate(msg.date);
-					tdSender.innerHTML = msg.sender;
-					tdSubject.innerHTML = msg.subject;
-					tdBody.innerHTML = msg.body;
-					row1.appendChild(tdDate);
-					row1.appendChild(tdSender);
-					row1.appendChild(tdSubject);
-					row1.className = 'msgHeader';
-					row1.onclick = 'toggleVisibility()';
-					tdBody.colSpan = "3";
-					row2.appendChild(tdBody);
-					row2.className = 'msgBody'; row2.onclick = 'toggleVisibility()';
-
-					// row2.style.display = "none";
-					tbody.appendChild(row1);
-					tbody.appendChild(row2);
-					table.appendChild(tbody);
-
-
-				}, 3000
+					const msg = getNewMessage();
+					loadMessage(msg);
+				}, 9000
 			);
-
-
 		};
 	</script>
 </head>
 
 <body>
+	<h1 id='h1'>GeeMail</h1>
 	<div class="container" id="main">
 	</div>
 </body>

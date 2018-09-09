@@ -1,9 +1,18 @@
+h1 {
+  text-align: center;
+  color: blue;
+}
+
+body {
+  background-color: aliceblue;
+}
 #mailbox {
   margin: auto auto;
   border: 1px solid blue;
 }
 
 #mailbox th {
+  margin: auto 60px;
   background-color: white;
   color: blue;
   text-align: center;
@@ -12,20 +21,29 @@
 }
 
 #mailbox td {
-  margin: 0 auto;
+  /* margin: 0 auto; */
   padding: 5px 5px;
+}
+#mailbox .msgHeader td {
+  border-top: 1px solid blue;
 }
 #main {
   text-align: center;
 }
 .msgHeader {
-  background-color: lightgray;
+  background-color: #eee;
 }
 .msgBody {
   background-color: white;
   font-style: italic;
+  /* display: none; */
 }
-#ctr {
+.counter {
   font-style: italic;
   color: blue;
+}
+
+.msgHeader:hover,
+.msgHeader:hover + .msgBody {
+  background: lightyellow;
 }

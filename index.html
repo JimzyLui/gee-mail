@@ -8,56 +8,80 @@
 		window.onload = function () {
 			// ALL OF YOUR JAVASCRIPT CODE SHOULD GO HERE. 
 			// We have to use window.onload so your JavaScript doesn't execute until the page has loaded and all HTML has been downloaded to your browser
-			var iMsgCounter = 0;
-			var ctrMsgTop = document.createElement('p');
-			var ctrMsgBottom = document.createElement('p');
+			let iMsgCounter = 0;
+			const ctrMsgTop = document.createElement('p');
+			const ctrMsgBottom = document.createElement('p');
 			ctrMsgTop.className = 'counter';
 			ctrMsgBottom.className = 'counter';
+
+			// format the timestamp as M/D/YYYY h:m
 			function formatDate(dte) {
-				return dte.getMonth() + 1 + '/' + dte.getDate() + '/' + dte.getFullYear() + '  ' +
-					dte.getHours() + ':' + dte.getMinutes();
-				// return dte.getFullYear();
+				return dte.getMonth() + 1 + '/' +
+					dte.getDate() + '/' +
+					dte.getFullYear() + '  ' +
+					dte.getHours() + ':' +
+					dte.getMinutes();
 			}
+			/*
+				Clicking on a row will toggle its visibility
+				odd row indices should always be visible
+				even row indices indicate message rows which are toggled
+			*/
 			function toggleVisibility() {
-				var iRow = this.rowIndex;
-				var iRowHead = 0;
-				var iRowBody = 0;
+				// get clicked-on row index
+				const iRow = this.rowIndex;
+				let iRowHead = 0;
+				let iRowBody = 0;
+
 				// check if odd/even row
 				if (iRow % 2 === 0) {
-					//even, msg row
+					// even, msg row
 					iRowBody = iRow;
 					iRowHead = iRow - 1;
 				} else {
+					// odd, header row
 					iRowHead = iRow;
 					iRowBody = iRow + 1;
 				}
-				var rowMsgH = document.getElementById('mailbox').rows[iRowHead];
-				var rowMsgB = document.getElementById('mailbox').rows[iRowBody];
+
+				// now reference the msg header & body rows
+				const rowMsgH =
+					document.getElementById('mailbox').rows[iRowHead];
+				const rowMsgB =
+					document.getElementById('mailbox').rows[iRowBody];
+
+				// toggle visibility
 				if (rowMsgB.style.display == "none") {
-					// rowMsgB.style.visibility = 'visible';
 					rowMsgB.style.display = '';
-					// alert(iRowBody);
 				} else {
 					rowMsgB.style.display = 'none';
-					// alert('none');
 				}
 			}
+
+			// this fx was taken from on-line --Jimzy
+			// it's used to sort the msg array by date
 			function sortByKey(array, key) {
 				return array.sort(function (a, b) {
-					var x = a[key]; var y = b[key];
+					var x = a[key];
+					var y = b[key];
 					return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 				});
 			}
+
+			/*
+				Take a message object and add it as a visible header(date/sender/subject) row and a hidden msg body row
+				at the bottom of the mailbox table.
+			*/
 			function loadMessage(msg) {
 				iMsgCounter++;
 				ctrMsgTop.innerHTML = iMsgCounter + ' messages';
 				ctrMsgBottom.innerHTML = iMsgCounter + ' messages';
-				var rowMsgHeader = document.createElement('tr');
-				var rowMsgBody = document.createElement('tr');
-				var tdDate = document.createElement('td');
-				var tdSender = document.createElement('td');
-				var tdSubject = document.createElement('td');
-				var tdBody = document.createElement('td');
+				const rowMsgHeader = document.createElement('tr');
+				const rowMsgBody = document.createElement('tr');
+				const tdDate = document.createElement('td');
+				const tdSender = document.createElement('td');
+				const tdSubject = document.createElement('td');
+				const tdBody = document.createElement('td');
 				tdDate.innerHTML = formatDate(msg.date);
 				tdSender.innerHTML = msg.sender;
 				tdSubject.innerHTML = msg.subject;
@@ -75,21 +99,22 @@
 				tbody.appendChild(rowMsgHeader);
 				tbody.appendChild(rowMsgBody);
 			}
+
 			const arrTitles = ["Date", "Subject", "Sender"];
-			var main = document.getElementById('main');
-			var table = document.createElement('table');
+			const main = document.getElementById('main');
+			const table = document.createElement('table');
 			table.id = 'mailbox';
 
-			var thead = document.createElement('thead');
-			var rowTableHead = document.createElement('tr');
-			for (var i = 0; i < arrTitles.length; i += 1) {
-				var th = document.createElement('th');
+			const thead = document.createElement('thead');
+			const rowTableHead = document.createElement('tr');
+			for (let i = 0; i < arrTitles.length; i += 1) {
+				const th = document.createElement('th');
 				th.innerHTML = arrTitles[i];
 				rowTableHead.appendChild(th);
 			}
 			thead.appendChild(rowTableHead);
 			table.appendChild(thead);
-			var tbody = document.createElement('tbody'); table.appendChild(tbody);
+			const tbody = document.createElement('tbody'); table.appendChild(tbody);
 
 			// need to sort the array first
 			window.geemails = sortByKey(window.geemails, 'date');
@@ -97,22 +122,22 @@
 			main.appendChild(table);
 			main.appendChild(ctrMsgBottom);
 			// load the email that's already here
-			for (x = 0; x < window.geemails.length; x++) {
+			for (let x = 0; x < window.geemails.length; x++) {
 				loadMessage(window.geemails[x]);
 			}
-			// add new incoming email
+			// add new incoming email - 3 secs
 			setInterval(
 				function () {
 					const msg = getNewMessage();
 					loadMessage(msg);
-				}, 9000
+				}, 3000
 			);
 		};
 	</script>
 </head>
 
 <body>
-	<h1 id='h1'>GeeMail</h1>
+	<h1>GeeMail</h1>
 	<div class="container" id="main">
 	</div>
 </body>

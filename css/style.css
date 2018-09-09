@@ -2,7 +2,9 @@ h1 {
   text-align: center;
   color: blue;
 }
-
+#main {
+  text-align: center;
+}
 body {
   background-color: aliceblue;
 }
@@ -19,16 +21,11 @@ body {
   font-style: bold;
   border-bottom: 2px solid blue;
 }
-
 #mailbox td {
-  /* margin: 0 auto; */
   padding: 5px 5px;
 }
 #mailbox .msgHeader td {
   border-top: 1px solid blue;
-}
-#main {
-  text-align: center;
 }
 .msgHeader {
   background-color: #eee;
@@ -36,7 +33,6 @@ body {
 .msgBody {
   background-color: white;
   font-style: italic;
-  /* display: none; */
 }
 .counter {
   font-style: italic;
